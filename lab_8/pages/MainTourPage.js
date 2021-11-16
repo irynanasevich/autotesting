@@ -1,9 +1,7 @@
 const { By, until } = require('selenium-webdriver');
+const tourSiteURL = 'https://www.tez-tour.com/';
 
 class MainTourPage {
-
-  _tourSiteURL = 'https://www.tez-tour.com/';
-
   closeModalButtonId = 'fancybox-close';
   countryTabXpath = '//*[@id="firstlevel"]/li[1]';
   countrySelector = 'country-150601';
@@ -18,16 +16,16 @@ class MainTourPage {
   }
 
   goToTourSite() {
-    this.driver.get(this._tourSiteURL);
+    this.driver.get(tourSiteURL);
     return this;
+  }
+
+  async waitCountryTab() {
+    return this.driver.wait(until.elementLocated(By.xpath(this.countryTabXpath)));
   }
 
   async waitCountryHotels() {
     return this.driver.wait(until.elementLocated(By.css(this.countryHotelsSelector)));
-  }
-
-  async waitHotelSearchInput() {
-    return this.driver.wait(until.elementLocated(By.css(this.hotelSearchInputSelector)));
   }
 
   findElementOnTourPage(byField, elementPath) {

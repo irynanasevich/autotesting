@@ -4,28 +4,31 @@ const MainTourPage = require('../pages/MainTourPage');
 const assert = require('assert');
 
 describe('Test tez-tour site', function () {
-
   let driver;
 
   beforeEach(function () {
     const chromeOptions = new chrome.Options();
     chromeOptions.addArguments("test-type");
     chromeOptions.addArguments("start-maximized");
-    chromeOptions.addArguments("--headless");
     chromeOptions.addArguments("--no-sandbox");
     chromeOptions.addArguments("--disable-dev-shm-usage");
+    chromeOptions.addArguments("--headless");
     driver = new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
   });
 
   afterEach(async function () {
-    driver && await driver.quit();
+    driver && driver.quit();
   });
 
   it('Should get hotels by name', async function() {
     const tourPage = new MainTourPage(driver);
     tourPage
       .goToTourSite()
-      .closeModal()
+      .closeModal();
+
+    await tourPage.waitCountryTab();
+
+    tourPage
       .openCountryTab()
       .chooseCountry()
 
@@ -33,13 +36,11 @@ describe('Test tez-tour site', function () {
 
       tourPage.chooseCountryHotels();
 
-      await tourPage.waitHotelSearchInput();
       tourPage
         .searchHotels('moscow')
         .findHotels()
 
-      const foundHotelsLength = await tourPage.getFoundHotelsLength();
-      console.log(foundHotelsLength);
-      assert.ok(foundHotelsLength > 0);
+      const foundHotelsLength = tourPage.getFoundHotelsLength();
+      assert.ok(foundHotelsLength);
   })
 })
