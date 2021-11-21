@@ -1,0 +1,5 @@
+{
+    "collectCoverage": true,
+    "testTimeout": 100,
+    "coverageDirectory": "./coverage"
+}
